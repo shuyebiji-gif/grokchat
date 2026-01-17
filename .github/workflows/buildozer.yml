@@ -22,14 +22,20 @@ jobs:
         run: |
           pip install buildozer==1.5.0
 
+      # 👇 这是新增的克隆 P4A 步骤（必须保留）
+      - name: Clone Python for Android (P4A)
+        run: |
+          git clone https://github.com/kivy/python-for-android.git ~/python-for-android
+
       - name: Configure Buildozer for China mirror
         run: |
           echo "android.sdk_mirror = https://mirrors.tuna.tsinghua.edu.cn/android/repository/" >> buildozer.spec
           echo "android.ndk_mirror = https://mirrors.tuna.tsinghua.edu.cn/android/repository/" >> buildozer.spec
 
+      # 👇 这是修改后的 Build APK 步骤（必须改）
       - name: Build APK
         run: |
-          buildozer android debug -v
+          buildozer android debug -v --p4a-source-dir ~/python-for-android
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
