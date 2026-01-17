@@ -22,10 +22,10 @@ jobs:
         run: |
           pip install buildozer==1.5.0
 
-      # 克隆指定版本的 P4A（避免最新版兼容性问题）
+      # 克隆默认分支的 P4A
       - name: Clone Python for Android (P4A)
         run: |
-          git clone --branch v2023.07.02 https://github.com/kivy/python-for-android.git /home/runner/python-for-android
+          git clone https://github.com/kivy/python-for-android.git /home/runner/python-for-android
 
       - name: Configure Buildozer for China mirror
         run: |
