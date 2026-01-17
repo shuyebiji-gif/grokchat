@@ -1,0 +1,38 @@
+name: Buildozer Android Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git cython3 openjdk-17-jdk
+
+      - name: Install Buildozer
+        run: |
+          pip install buildozer==1.5.0
+
+      - name: Configure Buildozer for China mirror
+        run: |
+          echo "android.sdk_mirror = https://mirrors.tuna.tsinghua.edu.cn/android/repository/" >> buildozer.spec
+          echo "android.ndk_mirror = https://mirrors.tuna.tsinghua.edu.cn/android/repository/" >> buildozer.spec
+
+      - name: Build APK
+        run: |
+          buildozer android debug -v
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: grokchat-apk
+          path: bin/*.apk
